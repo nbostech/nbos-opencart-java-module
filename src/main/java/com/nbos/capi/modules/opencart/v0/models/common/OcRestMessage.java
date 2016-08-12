@@ -6,5 +6,14 @@ package com.nbos.capi.modules.opencart.v0.models.common;
 
 public class OcRestMessage {
     Boolean success;
+
+    public Object getError() {
+        return error;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
     Object error;
 }

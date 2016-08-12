@@ -2,7 +2,7 @@ package com.nbos.capi.modules.opencart.v0;
 
 import com.nbos.capi.modules.opencart.v0.models.cart.AddToCartResponse;
 import com.nbos.capi.modules.opencart.v0.models.cart.AddToCartApiModel;
-import com.nbos.capi.modules.opencart.v0.models.connect.ConnectApiModel;
+import com.nbos.capi.modules.opencart.v0.models.connect.NbosConnectResponse;
 import com.nbos.capi.modules.opencart.v0.models.locale.CountriesApiModel;
 import com.nbos.capi.modules.opencart.v0.models.locale.ZoneApiModel;
 import com.nbos.capi.modules.opencart.v0.models.paymentmethods.PaymentMethodsApiModel;
@@ -46,7 +46,7 @@ public interface OCRemoteApi {
     String cartPay = "/api/rest/pay";
 
     @POST(nbosConnect)
-    Call<ConnectApiModel> connectToNbos(@Header("Authorization") String authorization, @Body NbosConnectModel nbosConnectModel);
+    Call<NbosConnectResponse> connectToNbos(@Header("Authorization") String authorization, @Body NbosConnectModel nbosConnectModel);
 
     @POST(cartUrl)
     Call<AddToCartResponse> addToCart(@Header("Authorization") String authorization, @Header("X-Oc-Currency") String currency, @Body AddToCartApiModel addToCartApiModel);

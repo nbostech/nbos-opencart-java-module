@@ -8,5 +8,14 @@ import com.nbos.capi.modules.opencart.v0.models.common.OcRestMessage;
 
 public class AddToCartResponse extends OcRestMessage {
     ProductResponseModel product;
+
+    public String getTotal() {
+        return total;
+    }
+
+    public ProductResponseModel getProduct() {
+        return product;
+    }
+
     String total;
 }

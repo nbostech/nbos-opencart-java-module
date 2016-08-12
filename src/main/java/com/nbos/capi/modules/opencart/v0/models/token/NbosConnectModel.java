@@ -5,5 +5,9 @@ package com.nbos.capi.modules.opencart.v0.models.token;
  */
 
 public class NbosConnectModel {
+    public void setNbos_token(String nbos_token) {
+        this.nbos_token = nbos_token;
+    }
+
     String nbos_token;
 }

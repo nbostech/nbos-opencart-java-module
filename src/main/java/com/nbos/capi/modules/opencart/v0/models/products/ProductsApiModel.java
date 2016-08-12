@@ -5,6 +5,14 @@ package com.nbos.capi.modules.opencart.v0.models.products;
  */
 
 public class ProductsApiModel {
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public ProductsData getData() {
+        return data;
+    }
+
     Boolean success;
     ProductsData data;
 }

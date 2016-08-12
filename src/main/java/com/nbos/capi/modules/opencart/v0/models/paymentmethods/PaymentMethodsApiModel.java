@@ -7,5 +7,9 @@ import com.nbos.capi.modules.opencart.v0.models.common.OcRestMessage;
  */
 
 public class PaymentMethodsApiModel  extends OcRestMessage{
+    public PaymentsDataModel getData() {
+        return data;
+    }
+
     PaymentsDataModel data;
 }
