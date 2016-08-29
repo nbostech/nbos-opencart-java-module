@@ -5,13 +5,16 @@ import com.nbos.capi.api.v0.NetworkApi;
 import com.nbos.capi.api.v0.models.TokenApiModel;
 import com.nbos.capi.modules.opencart.v0.models.cart.AddToCartApiModel;
 import com.nbos.capi.modules.opencart.v0.models.cart.AddToCartResponse;
+import com.nbos.capi.modules.opencart.v0.models.cart.ConfirmCartResponse;
+import com.nbos.capi.modules.opencart.v0.models.cart.GetCartResponse;
 import com.nbos.capi.modules.opencart.v0.models.connect.NbosConnectResponse;
 import com.nbos.capi.modules.opencart.v0.models.locale.CountriesApiModel;
 import com.nbos.capi.modules.opencart.v0.models.locale.ZoneApiModel;
+import com.nbos.capi.modules.opencart.v0.models.paymentmethods.PaymentMethodBody;
 import com.nbos.capi.modules.opencart.v0.models.paymentmethods.PaymentMethodsApiModel;
+import com.nbos.capi.modules.opencart.v0.models.paymentmethods.SetPaymentResponse;
 import com.nbos.capi.modules.opencart.v0.models.products.ProductsApiModel;
 import com.nbos.capi.modules.opencart.v0.models.token.NbosConnectModel;
-import com.nbos.capi.modules.opencart.v0.models.token.OpenCartTokenApiModel;
 
 import java.io.IOException;
 
@@ -30,16 +33,17 @@ public class OpenCartApi extends NetworkApi{
         setRemoteApiClass(OCRemoteApi.class);
     }
 
-    public OpenCartTokenApiModel getGuestToken(String authorization,final IdnCallback<OpenCartTokenApiModel> callback) {
+    public TokenApiModel getGuestToken(String authorization,final IdnCallback<TokenApiModel> callback) {
 
         OCRemoteApi ocRemoteApi = getRemoteApi();
-        Call<OpenCartTokenApiModel> call = ocRemoteApi.getGuestToken("Basic " + authorization);
+        Call<TokenApiModel> call = ocRemoteApi.getGuestToken("Basic " + authorization);
 
-        OpenCartTokenApiModel openCartTokenApiModel = null;
+        TokenApiModel openCartTokenApiModel = null;
         try {
-            Response<OpenCartTokenApiModel> response = call.execute();
+            Response<TokenApiModel> response = call.execute();
             openCartTokenApiModel = response.body();
             System.out.println("token:" + openCartTokenApiModel.getAccess_token());
+            apiContext.setUserToken("opencart",openCartTokenApiModel);
             callback.onResponse(response);
             return openCartTokenApiModel;
         } catch (IOException e) {
@@ -48,17 +52,20 @@ public class OpenCartApi extends NetworkApi{
 
         return openCartTokenApiModel;
     }
-    public NbosConnectResponse connectToNbos(String authorization, final IdnCallback<NbosConnectResponse> callback) {
+    public NbosConnectResponse connectToNbos(final IdnCallback<NbosConnectResponse> callback) {
         OCRemoteApi ocRemoteApi = getRemoteApi();
         TokenApiModel tokenApiModel;
-        if(apiContext.getUserToken("identity").getAccess_token()!= null){
+        if(apiContext.getUserToken("identity") != null){
             tokenApiModel = apiContext.getUserToken("identity");
         } else {
             tokenApiModel = apiContext.getClientToken();
         }
         NbosConnectModel nbosConnectModel = new NbosConnectModel();
         nbosConnectModel.setNbos_token(tokenApiModel.getAccess_token());
-        Call<NbosConnectResponse> call = ocRemoteApi.connectToNbos("Bearer " + authorization,nbosConnectModel);
+        if(apiContext.getUserToken("opencart") != null){
+            tokenApiModel = apiContext.getUserToken("opencart");
+        }
+        Call<NbosConnectResponse> call = ocRemoteApi.connectToNbos("Bearer " + tokenApiModel.getAccess_token(),nbosConnectModel);
 
         NbosConnectResponse connectApiModel = null;
         call.enqueue(new Callback<NbosConnectResponse>() {
@@ -80,7 +87,12 @@ public class OpenCartApi extends NetworkApi{
     }
     public PaymentMethodsApiModel getPaymentMethods(final IdnCallback<PaymentMethodsApiModel> callback) {
         OCRemoteApi ocRemoteApi = getRemoteApi();
-        TokenApiModel tokenApiModel = apiContext.getClientToken();
+        TokenApiModel tokenApiModel;
+        if(apiContext.getUserToken("opencart") != null){
+            tokenApiModel = apiContext.getUserToken("opencart");
+        }else {
+            tokenApiModel = apiContext.getClientToken();
+        }
         Call<PaymentMethodsApiModel> call = ocRemoteApi.getPaymentMethods("Bearer " + tokenApiModel.getAccess_token());
 
         PaymentMethodsApiModel paymentMethodsApiModel = null;
@@ -101,10 +113,44 @@ public class OpenCartApi extends NetworkApi{
         });
         return paymentMethodsApiModel;
     }
+    public SetPaymentResponse setPaymentMethod(PaymentMethodBody paymentMethodBody,final IdnCallback<SetPaymentResponse> callback) {
+        OCRemoteApi ocRemoteApi = getRemoteApi();
+        TokenApiModel tokenApiModel;
+        if(apiContext.getUserToken("opencart") != null){
+            tokenApiModel = apiContext.getUserToken("opencart");
+        }else {
+            tokenApiModel = apiContext.getClientToken();
+        }
+        Call<SetPaymentResponse> call = ocRemoteApi.setPaymentMethod("Bearer " + tokenApiModel.getAccess_token(),paymentMethodBody);
+
+        SetPaymentResponse setPaymentResponse = null;
+        call.enqueue(new Callback<SetPaymentResponse>() {
+            @Override
+            public void onResponse(Call<SetPaymentResponse> call, Response<SetPaymentResponse> response) {
+                if (response.code() == 200) {
+                    callback.onResponse(response);
+                } else{
+                    System.out.println(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SetPaymentResponse> call, Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+        return setPaymentResponse;
+    }
+
 
     public ProductsApiModel getProductsById(String merchantLanguage, String productId,final IdnCallback<ProductsApiModel> callback) {
         OCRemoteApi ocRemoteApi = getRemoteApi();
-        TokenApiModel tokenApiModel = apiContext.getClientToken();
+        TokenApiModel tokenApiModel;
+        if(apiContext.getUserToken("opencart") != null){
+            tokenApiModel = apiContext.getUserToken("opencart");
+        }else {
+            tokenApiModel = apiContext.getClientToken();
+        }
         Call<ProductsApiModel> call = ocRemoteApi.getProductsById("Bearer " + tokenApiModel.getAccess_token(),merchantLanguage,productId);
 
         ProductsApiModel products = null;
@@ -129,6 +175,9 @@ public class OpenCartApi extends NetworkApi{
     public AddToCartResponse addToCart(String currency, AddToCartApiModel addToCartApiModel, final IdnCallback<AddToCartResponse> callback) {
         OCRemoteApi ocRemoteApi = getRemoteApi();
         TokenApiModel tokenApiModel = apiContext.getClientToken();
+        if(apiContext.getUserToken("opencart") != null){
+            tokenApiModel = apiContext.getUserToken("opencart");
+        }
         Call<AddToCartResponse> call = ocRemoteApi.addToCart("Bearer " + tokenApiModel.getAccess_token(),currency,addToCartApiModel);
 
         AddToCartResponse addToCartResponse = null;
@@ -198,4 +247,67 @@ public class OpenCartApi extends NetworkApi{
     }
 
 
+    public ConfirmCartResponse confirmCart(final IdnCallback<ConfirmCartResponse> callback) {
+        OCRemoteApi ocRemoteApi = getRemoteApi();
+        TokenApiModel tokenApiModel = apiContext.getClientToken();
+        if(apiContext.getUserToken("opencart") != null){
+            tokenApiModel = apiContext.getUserToken("opencart");
+        }
+        Call<ConfirmCartResponse> call = ocRemoteApi.confirmCart("Bearer " + tokenApiModel.getAccess_token());
+
+        ConfirmCartResponse confirmCartResponse = null;
+        call.enqueue(new Callback<ConfirmCartResponse>() {
+            @Override
+            public void onResponse(Call<ConfirmCartResponse> call, Response<ConfirmCartResponse> response) {
+                if (response.code() == 200) {
+                    callback.onResponse(response);
+                } else{
+                    System.out.println(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ConfirmCartResponse> call, Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+        return confirmCartResponse;
+    }
+
+    public GetCartResponse getCart(final IdnCallback<GetCartResponse> callback){
+        OCRemoteApi ocRemoteApi = getRemoteApi();
+        TokenApiModel tokenApiModel = apiContext.getClientToken();
+        if(apiContext.getUserToken("opencart") != null){
+            tokenApiModel = apiContext.getUserToken("opencart");
+        }
+        GetCartResponse getCartResponse = null;
+
+        Call<GetCartResponse> call = ocRemoteApi.getCart("Bearer " + tokenApiModel.getAccess_token(), "INR");
+        Response<GetCartResponse> response = null;
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        callback.onResponse(response);
+        return getCartResponse;
+
+//        call.enqueue(new Callback<GetCartResponse>() {
+//            @Override
+//            public void onResponse(Call<GetCartResponse> call, Response<GetCartResponse> response) {
+//                if (response.code() == 200) {
+//                    callback.onResponse(response);
+//                } else{
+//                    System.out.println(response);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<GetCartResponse> call, Throwable t) {
+//                callback.onFailure(t);
+//
+//            }
+//        });
+       // return getCartResponse;
+    }
 }

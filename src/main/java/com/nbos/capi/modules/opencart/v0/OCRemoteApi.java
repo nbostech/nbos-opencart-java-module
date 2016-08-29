@@ -1,14 +1,18 @@
 package com.nbos.capi.modules.opencart.v0;
 
+import com.nbos.capi.api.v0.models.TokenApiModel;
 import com.nbos.capi.modules.opencart.v0.models.cart.AddToCartResponse;
 import com.nbos.capi.modules.opencart.v0.models.cart.AddToCartApiModel;
+import com.nbos.capi.modules.opencart.v0.models.cart.ConfirmCartResponse;
+import com.nbos.capi.modules.opencart.v0.models.cart.GetCartResponse;
 import com.nbos.capi.modules.opencart.v0.models.connect.NbosConnectResponse;
 import com.nbos.capi.modules.opencart.v0.models.locale.CountriesApiModel;
 import com.nbos.capi.modules.opencart.v0.models.locale.ZoneApiModel;
+import com.nbos.capi.modules.opencart.v0.models.paymentmethods.PaymentMethodBody;
 import com.nbos.capi.modules.opencart.v0.models.paymentmethods.PaymentMethodsApiModel;
+import com.nbos.capi.modules.opencart.v0.models.paymentmethods.SetPaymentResponse;
 import com.nbos.capi.modules.opencart.v0.models.products.ProductsApiModel;
 import com.nbos.capi.modules.opencart.v0.models.token.NbosConnectModel;
-import com.nbos.capi.modules.opencart.v0.models.token.OpenCartTokenApiModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -50,9 +54,16 @@ public interface OCRemoteApi {
 
     @POST(cartUrl)
     Call<AddToCartResponse> addToCart(@Header("Authorization") String authorization, @Header("X-Oc-Currency") String currency, @Body AddToCartApiModel addToCartApiModel);
+    @POST(cartUrl)
+    Call<ConfirmCartResponse> confirmCart(@Header("Authorization") String authorization);
+    @GET(cartUrl)
+    Call<GetCartResponse> getCart(@Header("Authorization") String authorization, @Header("X-Oc-Currency") String currency);
 
     @GET(paymentMethods)
     Call<PaymentMethodsApiModel> getPaymentMethods(@Header("Authorization") String authorization);
+
+    @POST(paymentMethods)
+    Call<SetPaymentResponse> setPaymentMethod(@Header("Authorization") String authorization, @Body PaymentMethodBody paymentMethodBody);
 
     @GET(countriesUrl)
     Call<CountriesApiModel> getCountries(@Header("Authorization") String authorization);
@@ -64,7 +75,7 @@ public interface OCRemoteApi {
     Call<ProductsApiModel> getProductsById(@Header("Authorization") String authorization, @Header("X-Oc-Merchant-Language")String merchantLanguage,@Path("product_id") String productId);
 
     @POST(ocToken)
-    Call<OpenCartTokenApiModel> getGuestToken(@Header("Authorization") String authorization);
+    Call<TokenApiModel> getGuestToken(@Header("Authorization") String authorization);
     //@Multipart
 //    @POST(uploadUrl)
 //    Call<UploadResponse> upload(@Header("Authorization") String authorization, @PartMap Map<String, RequestBody> params);
@@ -72,8 +83,7 @@ public interface OCRemoteApi {
 //    Call<CartResponse> postCart(@Header("Authorization") String authorization, @Body CartBody CartBody);
 //    @POST(cartUrl)
 //    Call<DeleteCartResponse> deleteCart(@Header("Authorization") String authorization, @Body Delete deleteCartBody);
-//    @GET(cartUrl)
-//    Call<GetCartResponse> getCart(@Header("Authorization") String authorization);
+
 //    @GET(ordersUrl)
 //    Call<OrdersResponse> getOrders(@Header("Authorization") String authorization);
 //     @GET(addressUrl)

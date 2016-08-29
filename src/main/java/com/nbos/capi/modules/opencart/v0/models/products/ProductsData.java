@@ -1,9 +1,6 @@
 package com.nbos.capi.modules.opencart.v0.models.products;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by vivekkiran on 8/6/16.
@@ -15,223 +12,223 @@ public class ProductsData {
     private String name;
     private String manufacturer;
 
-    private String getSku() {
+    public String getSku() {
         return sku;
     }
 
-    private String getId() {
+    public String getId() {
         return id;
     }
 
-    private String getSeo_h1() {
+    public String getSeo_h1() {
         return seo_h1;
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 
-    private String getManufacturer() {
+    public String getManufacturer() {
         return manufacturer;
     }
 
-    private String getModel() {
+    public String getModel() {
         return model;
     }
 
-    private String getImage() {
+    public String getImage() {
         return image;
     }
 
-    private List<Object> getImages() {
+    public List<Object> getImages() {
         return images;
     }
 
-    private String getOriginal_image() {
+    public String getOriginal_image() {
         return original_image;
     }
 
-    private List<Object> getOriginal_images() {
+    public List<Object> getOriginal_images() {
         return original_images;
     }
 
-    private String getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    private String getPrice_formated() {
+    public String getPrice_formated() {
         return price_formated;
     }
 
-    private Long getRating() {
+    public Long getRating() {
         return rating;
     }
 
-    private String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    private List<Object> getAttribute_groups() {
+    public List<Object> getAttribute_groups() {
         return attribute_groups;
     }
 
-    private String getSpecial() {
+    public String getSpecial() {
         return special;
     }
 
-    private String getSpecial_formated() {
+    public String getSpecial_formated() {
         return special_formated;
     }
 
-    private String getSpecial_start_date() {
+    public String getSpecial_start_date() {
         return special_start_date;
     }
 
-    private String getSpecial_end_date() {
+    public String getSpecial_end_date() {
         return special_end_date;
     }
 
-    private List<Object> getDiscounts() {
+    public List<Object> getDiscounts() {
         return discounts;
     }
 
-    private List<OptionsListModel> getOptions() {
+    public List<OptionsListModel> getOptions() {
         return options;
     }
 
-    private String getMinimum() {
+    public String getMinimum() {
         return minimum;
     }
 
-    private String getMeta_title() {
+    public String getMeta_title() {
         return meta_title;
     }
 
-    private String getMeta_description() {
+    public String getMeta_description() {
         return meta_description;
     }
 
-    private String getMeta_keyword() {
+    public String getMeta_keyword() {
         return meta_keyword;
     }
 
-    private String getTag() {
+    public String getTag() {
         return tag;
     }
 
-    private String getUpc() {
+    public String getUpc() {
         return upc;
     }
 
-    private String getEan() {
+    public String getEan() {
         return ean;
     }
 
-    private String getJan() {
+    public String getJan() {
         return jan;
     }
 
-    private String getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    private String getMpn() {
+    public String getMpn() {
         return mpn;
     }
 
-    private String getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    private String getStock_status() {
+    public String getStock_status() {
         return stock_status;
     }
 
-    private Object getManufacturer_id() {
+    public Object getManufacturer_id() {
         return manufacturer_id;
     }
 
-    private String getTax_class_id() {
+    public String getTax_class_id() {
         return tax_class_id;
     }
 
-    private String getDate_available() {
+    public String getDate_available() {
         return date_available;
     }
 
-    private String getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    private String getWeight_class_id() {
+    public String getWeight_class_id() {
         return weight_class_id;
     }
 
-    private String getLength() {
+    public String getLength() {
         return length;
     }
 
-    private String getWidth() {
+    public String getWidth() {
         return width;
     }
 
-    private String getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    private String getLength_class_id() {
+    public String getLength_class_id() {
         return length_class_id;
     }
 
-    private String getSubtract() {
+    public String getSubtract() {
         return subtract;
     }
 
-    private String getSort_order() {
+    public String getSort_order() {
         return sort_order;
     }
 
-    private String getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    private String getDate_added() {
+    public String getDate_added() {
         return date_added;
     }
 
-    private String getDate_modified() {
+    public String getDate_modified() {
         return date_modified;
     }
 
-    private String getViewed() {
+    public String getViewed() {
         return viewed;
     }
 
-    private String getWeight_class() {
+    public String getWeight_class() {
         return weight_class;
     }
 
-    private String getLength_class() {
+    public String getLength_class() {
         return length_class;
     }
 
-    private Object getReward() {
+    public Object getReward() {
         return reward;
     }
 
-    private String getPoints() {
+    public String getPoints() {
         return points;
     }
 
-    private List<Object> getCategory() {
+    public List<Object> getCategory() {
         return category;
     }
 
-    private String getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    private ReviewsModel getReviews() {
+    public ReviewsModel getReviews() {
         return reviews;
     }
 
